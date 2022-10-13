@@ -37,16 +37,15 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
     pg: {
       client: 'pg',
       connection: {
-        host: Env.get('PG_HOST'),
-        port: Env.get('PG_PORT'),
-        user: Env.get('PG_USER'),
+        host: Env.get('PG_HOST', '127.0.0.1'),
+        port: Env.get('PG_PORT', 5433),
+        user: Env.get('PG_USER', 'postgres'),
         password: Env.get('PG_PASSWORD', ''),
-        database: Env.get('PG_DB_NAME'),
+        database: Env.get('PG_DB_NAME', 'movieApp'),
       },
-      healthCheck: false,
-			debug: false,
+      healthCheck: true,
+      debug: false,
     },
-
   },
 
   /*
@@ -61,8 +60,7 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   | - Or define a custom function to compute the primary key for a given model.
   |
   */
-  orm: {
-  },
+  orm: {},
 }
 
 export default databaseConfig
