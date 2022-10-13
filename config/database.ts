@@ -24,7 +24,7 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
 
   connections: {
     /*
-    |--------------------------------------------------------------------------
+    |-------------------------------------------------------------------------
     | PostgreSQL config
     |--------------------------------------------------------------------------
     |
@@ -40,10 +40,10 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
         host: Env.get('PG_HOST', '127.0.0.1'),
         port: Env.get('PG_PORT', 5433),
         user: Env.get('PG_USER', 'postgres'),
-        password: Env.get('PG_PASSWORD', ''),
-        database: Env.get('PG_DB_NAME', 'movieApp'),
+        password: Env.get('PG_PASSWORD'),
+        database: Env.get('PG_DB_NAME', 'postgres'),
       },
-      healthCheck: true,
+      healthCheck: false,
       debug: false,
     },
   },
