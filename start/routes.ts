@@ -14,4 +14,24 @@ Route.get('/health', async ({ response }) => {
 Route.group(() => {
   Route.post('login', 'UserController.login')
   Route.post('register', 'UserController.register')
+  Route.put('update', 'UserController.update').middleware('auth')
+  Route.get('/', 'UserController.users')
 }).prefix('/user')
+
+Route.group(() => {
+  Route.post('add', 'MovieController.add')
+}).prefix('/movies')
+
+Route.group(() => {
+  Route.post('add', 'MovieKindController.add')
+  Route.delete('delete', 'MovieKindController.delete')
+  Route.get('/', 'MovieKindController.kinds')
+  Route.put('update', 'MovieKindController.update')
+}).prefix('/moviekind')
+
+Route.group(() => {
+  Route.post('add', 'ActorController.add')
+  Route.put('update', 'ActorController.update')
+  Route.delete('delete', 'ActorController.delete')
+  Route.get('/', 'ActorController.actors')
+}).prefix('/actors')
