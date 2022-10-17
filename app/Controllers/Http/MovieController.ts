@@ -13,4 +13,34 @@ export default class MoviesController {
     })
     return promise
   }
+
+  public async update({ request }) {
+    const payload = await request.body()
+    console.log(payload)
+
+    const movie = await Movie.find(payload.id)
+    if (!movie) {
+      return 'no have a movie'
+    }
+
+    const promise = await Actor.query()
+      .where('id', payload.id)
+      .update({ ...payload })
+    return promise
+  }
+
+  public async delete({ request, response }) {
+    const { id } = request.body()
+    const movie = await Movie.find(id)
+    if (movie) {
+      await Movie.query().where('id', id).delete()
+      return 'delete succes'
+    }
+    return response.json({ error: 'no have movie like that' })
+  }
+
+  public async movies() {
+    const movie = await Movie.all()
+    return movie
+  }
 }

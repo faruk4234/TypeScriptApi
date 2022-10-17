@@ -18,20 +18,30 @@ Route.group(() => {
   Route.get('/', 'UserController.users')
 }).prefix('/user')
 
+//movies
 Route.group(() => {
   Route.post('add', 'MovieController.add')
+  Route.put('update', 'MovieController.update')
+  Route.delete('delete', 'MovieController.delete')
+  Route.get('/', 'MovieController.movies')
 }).prefix('/movies')
 
+//movieKind
 Route.group(() => {
   Route.post('add', 'MovieKindController.add')
   Route.delete('delete', 'MovieKindController.delete')
   Route.get('/', 'MovieKindController.kinds')
   Route.put('update', 'MovieKindController.update')
-}).prefix('/moviekind')
+})
+  .prefix('/moviekind')
+  .middleware('auth')
 
+//actor
 Route.group(() => {
   Route.post('add', 'ActorController.add')
   Route.put('update', 'ActorController.update')
   Route.delete('delete', 'ActorController.delete')
   Route.get('/', 'ActorController.actors')
-}).prefix('/actors')
+})
+  .prefix('/actors')
+  .middleware('auth')

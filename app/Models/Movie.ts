@@ -25,9 +25,9 @@ export default class Movies extends BaseModel {
   @column()
   public year: number
 
-  @hasMany(() => MovieKind, { foreignKey: 'id' })
-  public kind: HasMany<typeof MovieKind>
+  @column()
+  public kind: Array<number>
 
-  @hasMany(() => Actor, { foreignKey: 'id' })
-  public actor: HasMany<typeof Actor>
+  @column()
+  public actor: Array<number>
 }
