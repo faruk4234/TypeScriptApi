@@ -5,10 +5,11 @@ export default class Actors extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').primary()
-      table.string('name', 127)
-      table.integer('age', 127)
-      table.string('movies', 127)
+      table.increments('id')
+      table.string('name')
+      table.integer('age')
+      table.integer('who_created').unsigned().references('users.id').onDelete('CASCADE') //
+      table.integer('who_updated').unsigned().references('users.id').onDelete('CASCADE') //
     })
   }
 

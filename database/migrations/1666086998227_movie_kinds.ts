@@ -5,9 +5,10 @@ export default class MovieKinds extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').primary()
-      table.string('name', 63).unique()
-      table.string('description')
+      table.increments('id')
+      table.integer('movie_id').unsigned().references('movies.id').onDelete('CASCADE')
+      table.integer('kind_id').unsigned().references('kinds.id').onDelete('CASCADE')
+      table.unique(['movie_id', 'kind_id'])
     })
   }
 

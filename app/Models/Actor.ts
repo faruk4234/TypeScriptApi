@@ -8,7 +8,10 @@ import {
   HasMany,
   belongsTo,
   BelongsTo,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
+import Movies from './Movie'
 
 export default class Actor extends BaseModel {
   @column({ isPrimary: true })
@@ -20,6 +23,6 @@ export default class Actor extends BaseModel {
   @column()
   public age: number
 
-  @column()
-  public movies: Array<String>
+  @manyToMany(() => Movies)
+  public movies: ManyToMany<typeof Movies>
 }

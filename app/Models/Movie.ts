@@ -10,7 +10,7 @@ import {
   ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Actor from './Actor'
-import MovieKind from './MovieKind'
+import Kinds from './Kinds'
 
 export default class Movies extends BaseModel {
   @column({ isPrimary: true })
@@ -25,9 +25,9 @@ export default class Movies extends BaseModel {
   @column()
   public year: number
 
-  @column()
-  public kind: Array<number>
+  @manyToMany(() => Kinds)
+  public kinds: ManyToMany<typeof Kinds>
 
-  @column()
-  public actor: Array<number>
+  @manyToMany(() => Actor)
+  public actors: ManyToMany<typeof Actor>
 }

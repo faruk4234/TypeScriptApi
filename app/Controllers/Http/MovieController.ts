@@ -23,7 +23,7 @@ export default class MoviesController {
       return 'no have a movie'
     }
 
-    const promise = await Actor.query()
+    const promise = await Movie.query()
       .where('id', payload.id)
       .update({ ...payload })
     return promise

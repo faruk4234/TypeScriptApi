@@ -45,7 +45,7 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
       },
       healthCheck: true,
       migrations: {},
-      debug: false,
+      debug: true,
     },
   },
 

@@ -3,13 +3,11 @@ import Actor from 'App/Models/Actor'
 export default class ActorController {
   public async add({ request, response }) {
     const { name, movies, age } = request.body()
-
     const promise = await Actor.create({
       name,
-      age,
-      movies,
+      age: age,
     })
-    return promise
+    return promise.related('movies').sync([1, 2])
   }
 
   public async update({ request, response }) {
