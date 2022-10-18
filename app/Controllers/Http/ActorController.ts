@@ -3,22 +3,22 @@ import Actor from 'App/Models/Actor'
 export default class ActorController {
   public async add({ request, response }) {
     const { name, movies, age } = request.body()
-    const promise = await Actor.create({
+    const actor = await Actor.create({
       name,
       age: age,
     })
-    return promise.related('movies').sync([1, 2])
+    movies ? actor.related('movies').sync([...movies]) : null
+    return actor
   }
 
   public async update({ request, response }) {
-    const { id } = request.body()
+    const { id, name, movies, age } = request.body()
 
     const actor = await Actor.find(id)
     if (actor) {
-      const promise = await Actor.query()
-        .where('id', id)
-        .update({ ...request.body() })
-      return promise
+      await Actor.query().where('id', id).update({ name, movies, age })
+      movies ? actor.related('movies').sync([...movies]) : null
+      return actor
     }
     return response.json({ error: 'no have actor like that' })
   }
@@ -34,7 +34,7 @@ export default class ActorController {
   }
 
   public async actors() {
-    const actors = await Actor.all()
+    const actors = await Actor.query().preload('movies')
     return actors
   }
 }

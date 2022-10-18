@@ -23,6 +23,12 @@ export default class Actor extends BaseModel {
   @column()
   public age: number
 
-  @manyToMany(() => Movies)
+  @manyToMany(() => Movies, {
+    localKey: 'id',
+    pivotForeignKey: 'actor_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'movie_id',
+    pivotTable: 'movie_actors',
+  })
   public movies: ManyToMany<typeof Movies>
 }

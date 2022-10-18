@@ -1,34 +1,39 @@
-import Actor from 'App/Models/Actor'
 import Movie from 'App/Models/Movie'
 
 export default class MoviesController {
-  public async add({ request, response }) {
-    const { name, description, kind, actor } = request.body()
-    console.log(kind)
-    const promise = await Movie.create({
+  //add movie
+  public async add({ request }) {
+    const { name, description, kinds, actors, year } = request.body()
+    console.log(kinds)
+    const movie = await Movie.create({
       name: name,
       description: description,
-      kind: kind,
-      actor: actor,
+      year: year,
     })
-    return promise
+
+    actors ? await movie.related('actors').sync([...actors]) : null
+    kinds ? await movie.related('kinds').sync([...kinds]) : null
+    return Movie.query().where('id', movie.id).preload('actors').preload('kinds')
   }
 
+  //update movie
   public async update({ request }) {
-    const payload = await request.body()
-    console.log(payload)
+    const { id, name, description, year, kinds, actors } = await request.body()
 
-    const movie = await Movie.find(payload.id)
+    const movie = await Movie.find(id)
     if (!movie) {
       return 'no have a movie'
     }
 
-    const promise = await Movie.query()
-      .where('id', payload.id)
-      .update({ ...payload })
-    return promise
+    await Movie.query().where('id', id).update({ name, description, year })
+
+    actors ? movie.related('actors').sync([...actors]) : null
+    kinds ? movie.related('kinds').sync([...kinds]) : null
+
+    return await Movie.query().where('id', id).preload('actors').preload('kinds')
   }
 
+  //delete movie
   public async delete({ request, response }) {
     const { id } = request.body()
     const movie = await Movie.find(id)
@@ -40,7 +45,7 @@ export default class MoviesController {
   }
 
   public async movies() {
-    const movie = await Movie.all()
+    const movie = await Movie.query().preload('actors').preload('kinds')
     return movie
   }
 }

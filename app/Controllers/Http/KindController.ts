@@ -14,7 +14,7 @@ export default class KindController {
       description: description,
     })
 
-    kind.related('movies').sync([...movies])
+    movies ? kind.related('movies').sync([...movies]) : null
     return Kinds.query().where('id', kind.id).preload('movies')
   }
 
@@ -31,12 +31,13 @@ export default class KindController {
   //update movie kind
   public async update({ request, response }) {
     const { id, movies, name, description } = request.body()
-    if (await Kinds.find(id)) {
+    const kind = await Kinds.find(id)
+
+    if (kind) {
       await Kinds.query().where('id', id).update({ name, description })
 
-      const kind = await Kinds.find(id)
       movies ? kind?.related('movies').sync([...movies]) : null
-      return kind?.preload('movies')
+      return kind
     }
     return response.json({ error: 'no have kind like that' })
   }
@@ -44,6 +45,6 @@ export default class KindController {
   //list all kinds
   public async kinds() {
     const kinds = await Kinds.query().preload('movies')
-    return { kinds }
+    return kinds
   }
 }
