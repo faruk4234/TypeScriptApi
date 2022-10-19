@@ -24,7 +24,9 @@ Route.group(() => {
   Route.put('update', 'MovieController.update')
   Route.delete('delete', 'MovieController.delete')
   Route.get('/', 'MovieController.movies')
-}).prefix('/movies')
+})
+  .prefix('/movies')
+  .middleware('auth')
 
 //movieKind
 Route.group(() => {
@@ -32,7 +34,9 @@ Route.group(() => {
   Route.delete('delete', 'KindController.delete')
   Route.get('/', 'KindController.kinds')
   Route.put('update', 'KindController.update')
-}).prefix('/moviekind')
+})
+  .prefix('/moviekind')
+  .middleware('auth')
 
 //actor
 Route.group(() => {
@@ -40,4 +44,6 @@ Route.group(() => {
   Route.put('update', 'ActorController.update')
   Route.delete('delete', 'ActorController.delete')
   Route.get('/', 'ActorController.actors')
-}).prefix('/actors')
+})
+  .prefix('/actors')
+  .middleware('auth')

@@ -8,8 +8,8 @@ export default class Actors extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.integer('age')
-      table.integer('who_created').unsigned().references('users.id').onDelete('CASCADE') //
-      table.integer('who_updated').unsigned().references('users.id').onDelete('CASCADE') //
+      table.integer('created_by').unsigned().references('users.id').onDelete('CASCADE') //
+      table.integer('updated_by').unsigned().references('users.id').onDelete('CASCADE') //
     })
   }
 

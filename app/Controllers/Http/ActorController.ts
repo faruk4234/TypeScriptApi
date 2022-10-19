@@ -1,22 +1,23 @@
 import Actor from 'App/Models/Actor'
 
 export default class ActorController {
-  public async add({ request, response }) {
+  public async add({ request, auth }) {
     const { name, movies, age } = request.body()
     const actor = await Actor.create({
       name,
       age: age,
+      created_by: auth.user.id,
     })
     movies ? actor.related('movies').sync([...movies]) : null
     return actor
   }
 
-  public async update({ request, response }) {
+  public async update({ request, response, auth }) {
     const { id, name, movies, age } = request.body()
 
     const actor = await Actor.find(id)
     if (actor) {
-      await Actor.query().where('id', id).update({ name, movies, age })
+      await Actor.query().where('id', id).update({ name, movies, age, updated_by: auth.user.id })
       movies ? actor.related('movies').sync([...movies]) : null
       return actor
     }

@@ -1,17 +1,15 @@
 import {
   column,
-  beforeSave,
   BaseModel,
-  hasOne,
-  HasOne,
-  hasMany,
-  HasMany,
   belongsTo,
   BelongsTo,
   manyToMany,
   ManyToMany,
+  hasOne,
+  HasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 import Movies from './Movie'
+import User from './Users'
 
 export default class Actor extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +29,10 @@ export default class Actor extends BaseModel {
     pivotTable: 'movie_actors',
   })
   public movies: ManyToMany<typeof Movies>
+
+  @column()
+  public created_by: number
+
+  @column()
+  public updated_by: number
 }

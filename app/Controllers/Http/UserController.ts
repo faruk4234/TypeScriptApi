@@ -22,7 +22,6 @@ export default class UsersController {
       name: payload.name,
       surname: payload.surname,
     })
-
     return response.json({ success: 'User created' })
   }
 

@@ -46,9 +46,9 @@ export default class Movies extends BaseModel {
   })
   public actors: ManyToMany<typeof Actor>
 
-  @belongsTo(() => User)
-  public who_created: BelongsTo<typeof User>
+  @column()
+  public created_by: number
 
-  @belongsTo(() => User)
-  public who_updated: BelongsTo<typeof User>
+  @column()
+  public updated_by: number
 }

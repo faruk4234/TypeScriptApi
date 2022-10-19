@@ -1,5 +1,14 @@
-import { column, beforeSave, BaseModel, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  manyToMany,
+  ManyToMany,
+  belongsTo,
+  BelongsTo,
+} from '@ioc:Adonis/Lucid/Orm'
 import Movies from './Movie'
+import User from './Users'
 
 export default class Kind extends BaseModel {
   @column({ isPrimary: true })
@@ -19,4 +28,10 @@ export default class Kind extends BaseModel {
     pivotTable: 'movie_kinds',
   })
   public movies: ManyToMany<typeof Movies>
+
+  @belongsTo(() => User)
+  public who_created: BelongsTo<typeof User>
+
+  @belongsTo(() => User)
+  public who_updated: BelongsTo<typeof User>
 }

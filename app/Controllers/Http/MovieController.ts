@@ -2,13 +2,14 @@ import Movie from 'App/Models/Movie'
 
 export default class MoviesController {
   //add movie
-  public async add({ request }) {
+  public async add({ request, auth }) {
     const { name, description, kinds, actors, year } = request.body()
     console.log(kinds)
     const movie = await Movie.create({
       name: name,
       description: description,
       year: year,
+      created_by: auth.user.id,
     })
 
     actors ? await movie.related('actors').sync([...actors]) : null
@@ -17,7 +18,7 @@ export default class MoviesController {
   }
 
   //update movie
-  public async update({ request }) {
+  public async update({ request, auth }) {
     const { id, name, description, year, kinds, actors } = await request.body()
 
     const movie = await Movie.find(id)
@@ -25,7 +26,9 @@ export default class MoviesController {
       return 'no have a movie'
     }
 
-    await Movie.query().where('id', id).update({ name, description, year })
+    await Movie.query()
+      .where('id', id)
+      .update({ name, description, year, updated_by: auth.user.id })
 
     actors ? movie.related('actors').sync([...actors]) : null
     kinds ? movie.related('kinds').sync([...kinds]) : null
