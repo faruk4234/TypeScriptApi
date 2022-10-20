@@ -1,9 +1,10 @@
 import Kinds from 'App/Models/Kinds'
+import KindValidators from 'App/Validators/KindValidators'
 
 export default class KindController {
   //add movie kind
   public async add({ request, response }) {
-    const { name, description, movies } = request.body()
+    const { name, description, movies } = await request.validate(KindValidators.AddingValidator)
 
     if (await Kinds.findBy('name', name)) {
       return response.json({ error: 'Kind already exist' })
@@ -20,7 +21,7 @@ export default class KindController {
 
   //delete movie kind
   public async delete({ request, response }) {
-    const { id } = request.body()
+    const { id } = await request.validate(KindValidators.DeleteValidator)
     if (await Kinds.find(id)) {
       await Kinds.query().where('id', id).delete()
       return 'delete succes'
@@ -30,7 +31,7 @@ export default class KindController {
 
   //update movie kind
   public async update({ request, response }) {
-    const { id, movies, name, description } = request.body()
+    const { id, movies, name, description } = await request.validate(KindValidators.UpdateValidator)
     const kind = await Kinds.find(id)
 
     if (kind) {

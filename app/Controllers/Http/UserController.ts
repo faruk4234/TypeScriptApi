@@ -1,11 +1,9 @@
 import User from 'App/Models/Users'
-import RegisterValidator from 'App/Validators/UserValidators/RegisterValidator'
-import LoginValidator from 'App/Validators/UserValidators/LoginValidator'
-import UpdateValidator from 'App/Validators/UserValidators/UpdateValidator'
+import UserValidators from 'App/Validators/UserValidators'
 
 export default class UsersController {
-  public async login({ auth, request, response }) {
-    const payload = await request.validate(LoginValidator)
+  public async login({ auth, request }) {
+    const payload = await request.validate(UserValidators.LoginValidator)
     console.log(auth)
     const token = await auth.attempt(payload.email, payload.password)
     return token
@@ -13,7 +11,7 @@ export default class UsersController {
 
   //register user
   public async register({ request, response }) {
-    const payload = await request.validate(RegisterValidator)
+    const payload = await request.validate(UserValidators.RegisterValidator)
     const user = await User.findBy('email', payload.email)
     if (user) {
       return response.json({ error: 'User already exist' })
@@ -29,7 +27,7 @@ export default class UsersController {
 
   //update users
   public async update({ request, auth }) {
-    const payload = await request.validate(UpdateValidator)
+    const payload = await request.validate(UserValidators.UpdateValidator)
     if (payload.email) {
       const user = await User.findBy('email', payload.email)
       if (user) return 'this email alredy exisy'

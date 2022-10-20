@@ -1,11 +1,13 @@
 import Movie from 'App/Models/Movie'
 import AddingValidator from 'App/Validators/MovieValidators/AddingValidators'
+import MovieValidators from 'App/Validators/MovieValidators'
 
 export default class MoviesController {
   //add movie
   public async add({ request, auth }) {
-    const { name, description, kinds, actors, year } = await request.validate(AddingValidator)
-    console.log(kinds)
+    const { name, description, kinds, actors, year } = await request.validate(
+      MovieValidators.AddingValidator
+    )
     const movie = await Movie.create({
       name: name,
       description: description,
@@ -23,7 +25,9 @@ export default class MoviesController {
 
   //update movie
   public async update({ request, auth }) {
-    const { id, name, description, year, kinds, actors } = await request.body()
+    const { id, name, description, year, actors, kinds } = await request.validate(
+      MovieValidators.Updatevalidator
+    )
 
     const movie = await Movie.find(id)
     if (!movie) {
@@ -47,7 +51,7 @@ export default class MoviesController {
 
   //delete movie
   public async delete({ request, response }) {
-    const { id } = request.body()
+    const { id } = await request.validate(MovieValidators.DeleteValidator)
     const movie = await Movie.find(id)
     if (movie) {
       await Movie.query().where('id', id).delete()
