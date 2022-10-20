@@ -1,11 +1,13 @@
 import User from 'App/Models/Users'
-import RegisterValidator from 'App/Validators/RegisterValidator'
+import RegisterValidator from 'App/Validators/UserValidators/RegisterValidator'
+import LoginValidator from 'App/Validators/UserValidators/LoginValidator'
+import UpdateValidator from 'App/Validators/UserValidators/UpdateValidator'
 
 export default class UsersController {
   public async login({ auth, request, response }) {
-    const { email, password } = request.body()
+    const payload = await request.validate(LoginValidator)
     console.log(auth)
-    const token = await auth.attempt(email, password)
+    const token = await auth.attempt(payload.email, payload.password)
     return token
   }
 
@@ -26,12 +28,14 @@ export default class UsersController {
   }
 
   //update users
-  public async update({ request }) {
-    const payload = await request.body()
-    console.log(payload)
-
+  public async update({ request, auth }) {
+    const payload = await request.validate(UpdateValidator)
+    if (payload.email) {
+      const user = await User.findBy('email', payload.email)
+      if (user) return 'this email alredy exisy'
+    }
     const promise = await User.query()
-      .where('email', payload.email)
+      .where('id', auth.user.id)
       .update({ ...payload })
 
     return promise

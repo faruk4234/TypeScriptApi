@@ -33,6 +33,18 @@ export default class Actor extends BaseModel {
   @column()
   public created_by: number
 
+  @belongsTo(() => User, {
+    localKey: 'id',
+    foreignKey: 'created_by',
+  })
+  public created_user: BelongsTo<typeof User>
+
   @column()
   public updated_by: number
+
+  @belongsTo(() => User, {
+    localKey: 'id',
+    foreignKey: 'updated_by',
+  })
+  public updated_user: BelongsTo<typeof User>
 }

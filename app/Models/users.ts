@@ -22,10 +22,10 @@ export default class User extends BaseModel {
   public rememberMeToken?: string
 
   @hasMany(() => Actor, {
-    localKey: 'who_created',
+    localKey: 'created_by',
     foreignKey: 'id',
   })
-  public who_created: HasMany<typeof Actor>
+  public created_by: HasMany<typeof Actor>
 
   @beforeSave()
   public static async hashPassword(user: User) {

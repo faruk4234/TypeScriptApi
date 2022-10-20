@@ -1,7 +1,7 @@
 import Actor from 'App/Models/Actor'
 
 export default class ActorController {
-  public async add({ request, auth }) {
+  public async add({ request, auth, response }) {
     const { name, movies, age } = request.body()
     const actor = await Actor.create({
       name,
@@ -9,7 +9,7 @@ export default class ActorController {
       created_by: auth.user.id,
     })
     movies ? actor.related('movies').sync([...movies]) : null
-    return actor
+    return Actor.query().where('id', actor.id).preload('updated_user').preload('created_user')
   }
 
   public async update({ request, response, auth }) {
@@ -19,7 +19,11 @@ export default class ActorController {
     if (actor) {
       await Actor.query().where('id', id).update({ name, movies, age, updated_by: auth.user.id })
       movies ? actor.related('movies').sync([...movies]) : null
-      return actor
+      return Actor.query()
+        .where('id', id)
+        .preload('created_user')
+        .preload('updated_user')
+        .preload('movies')
     }
     return response.json({ error: 'no have actor like that' })
   }
@@ -35,7 +39,7 @@ export default class ActorController {
   }
 
   public async actors() {
-    const actors = await Actor.query().preload('movies')
+    const actors = await Actor.query().preload('movies').preload('created_user')
     return actors
   }
 }

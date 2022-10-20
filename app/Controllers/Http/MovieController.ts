@@ -1,9 +1,10 @@
 import Movie from 'App/Models/Movie'
+import AddingValidator from 'App/Validators/MovieValidators/AddingValidators'
 
 export default class MoviesController {
   //add movie
   public async add({ request, auth }) {
-    const { name, description, kinds, actors, year } = request.body()
+    const { name, description, kinds, actors, year } = await request.validate(AddingValidator)
     console.log(kinds)
     const movie = await Movie.create({
       name: name,
@@ -11,10 +12,13 @@ export default class MoviesController {
       year: year,
       created_by: auth.user.id,
     })
-
     actors ? await movie.related('actors').sync([...actors]) : null
     kinds ? await movie.related('kinds').sync([...kinds]) : null
-    return Movie.query().where('id', movie.id).preload('actors').preload('kinds')
+    return Movie.query()
+      .where('id', movie.id)
+      .preload('actors')
+      .preload('kinds')
+      .preload('created_user')
   }
 
   //update movie
@@ -33,7 +37,12 @@ export default class MoviesController {
     actors ? movie.related('actors').sync([...actors]) : null
     kinds ? movie.related('kinds').sync([...kinds]) : null
 
-    return await Movie.query().where('id', id).preload('actors').preload('kinds')
+    return await Movie.query()
+      .where('id', id)
+      .preload('actors')
+      .preload('kinds')
+      .preload('created_user')
+      .preload('updated_user')
   }
 
   //delete movie
@@ -48,7 +57,11 @@ export default class MoviesController {
   }
 
   public async movies() {
-    const movie = await Movie.query().preload('actors').preload('kinds')
+    const movie = await Movie.query()
+      .preload('actors')
+      .preload('kinds')
+      .preload('updated_user')
+      .preload('created_user')
     return movie
   }
 }

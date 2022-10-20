@@ -18,7 +18,7 @@ export default class RegisterValidator {
       },
       [
         rules.required(),
-        rules.maxLength(123),
+        rules.maxLength(20),
         rules.minLength(8),
         rules.confirmed('passwordConfirm'),
       ]
