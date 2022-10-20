@@ -2,7 +2,8 @@ import Actor from 'App/Models/Actor'
 import ActorValidators from 'App/Validators/ActorValidators'
 
 export default class ActorController {
-  public async add({ request, auth, response }) {
+  //ading actor
+  public async add({ request, auth }) {
     const { name, movies, age } = await request.validate(ActorValidators.AddingValidator)
     const actor = await Actor.create({
       name,
@@ -17,9 +18,9 @@ export default class ActorController {
       .preload('movies')
   }
 
+  //update actor
   public async update({ request, response, auth }) {
     const { id, name, movies, age } = await request.validate(ActorValidators.UpdateValidator)
-
     const actor = await Actor.find(id)
     if (actor) {
       await Actor.query().where('id', id).update({ name, age, updated_by: auth.user.id })
@@ -33,6 +34,7 @@ export default class ActorController {
     return response.json({ error: 'no have actor like that' })
   }
 
+  //update actor
   public async delete({ request, response }) {
     const { id } = await request.validate(ActorValidators.DeletingValidator)
     const actor = await Actor.find(id)
@@ -43,6 +45,7 @@ export default class ActorController {
     return response.json({ error: 'no have actor like that' })
   }
 
+  // get all actors
   public async actors() {
     const actors = await Actor.query()
       .preload('movies')

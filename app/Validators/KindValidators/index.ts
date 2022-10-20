@@ -1,6 +1,6 @@
 import AddingValidator from './AddingValidator'
 import DeleteValidator from './DeleteValidator'
-import UpdateValidator from './DeleteValidator'
+import UpdateValidator from './UpdatingValidator'
 
 export default {
   AddingValidator,

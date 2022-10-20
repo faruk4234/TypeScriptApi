@@ -38,7 +38,7 @@ export default class KindController {
       await Kinds.query().where('id', id).update({ name, description })
 
       movies ? kind?.related('movies').sync([...movies]) : null
-      return kind
+      return Kinds.query().where('id', id).preload('movies')
     }
     return response.json({ error: 'no have kind like that' })
   }
