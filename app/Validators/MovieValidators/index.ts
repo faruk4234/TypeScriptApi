@@ -1,9 +1,9 @@
 import AddingValidator from './AddingValidators'
-import Updatevalidator from './UpdateValidators'
+import UpdateValidator from './UpdateValidators'
 import DeleteValidator from './DeletingValidator'
 
 export default {
   AddingValidator,
-  Updatevalidator,
+  UpdateValidator,
   DeleteValidator,
 }

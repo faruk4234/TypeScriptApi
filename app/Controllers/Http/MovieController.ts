@@ -1,5 +1,4 @@
 import Movie from 'App/Models/Movie'
-import AddingValidator from 'App/Validators/MovieValidators/AddingValidators'
 import MovieValidators from 'App/Validators/MovieValidators'
 
 export default class MoviesController {
@@ -26,20 +25,18 @@ export default class MoviesController {
   //update movie
   public async update({ request, auth }) {
     const { id, name, description, year, actors, kinds } = await request.validate(
-      MovieValidators.Updatevalidator
+      MovieValidators.UpdateValidator
     )
-
     const movie = await Movie.find(id)
     if (!movie) {
       return 'no have a movie'
     }
+    actors ? movie.related('actors').sync([...actors]) : null
+    kinds ? movie.related('kinds').sync([...kinds]) : null
 
     await Movie.query()
       .where('id', id)
       .update({ name, description, year, updated_by: auth.user.id })
-
-    actors ? movie.related('actors').sync([...actors]) : null
-    kinds ? movie.related('kinds').sync([...kinds]) : null
 
     return await Movie.query()
       .where('id', id)
